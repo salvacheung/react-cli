@@ -57,6 +57,11 @@ module.exports = {
           cacheCompression: false,
         },
       },
+      {
+        test: /\.tsx?$/,
+        use: "ts-loader",
+        exclude: "/node_modules/",
+      },
     ],
   },
   plugins: [
@@ -81,7 +86,7 @@ module.exports = {
     }
   },
   resolve: {
-    extensions: [".jsx",".js",".json"],
+    extensions: [".jsx",".js",".tsx",".ts",".json"],
   },
   devServer: {
     host: "localhost",
