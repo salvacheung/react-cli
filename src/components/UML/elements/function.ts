@@ -4,6 +4,13 @@ import { classItemType } from "./class-item";
 
 export enum visibilityType {'public', 'private', 'protected'}
 
+export type extendsFunctionsType = {
+    hash?: string;
+    name?: string,
+    namespace?: string,
+    functions?: functionType[]
+}
+
 /**
  * 类的成员方法
  */
