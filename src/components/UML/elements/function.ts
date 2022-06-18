@@ -1,14 +1,14 @@
 import { argType } from "./argument";
-import classItem, { classItemType } from "./class-item";
+import classItem, { classItemType, classType } from "./class-item";
 
 
 export enum visibilityType {'public', 'private', 'protected'}
 
 export type extendsFunctionsType = {
     hash?: string;
-    name?: string,
-    namespace?: string,
-    functions?: functionType[]
+    name?: string;
+    namespace?: string;
+    functions?: functionType[];
 }
 
 /**
@@ -23,8 +23,6 @@ export type functionType = {
     isAbstract: boolean;
     // 是否是静态方法
     isStatic: boolean;                                  // 默认 false
-    // 是否是接口方法
-    isInterface: boolean;
     // 访问控制
     visibility?: visibilityType | null;   // 默认 public
     // 是否为最终方法（不可被继承重写）
@@ -32,7 +30,7 @@ export type functionType = {
     // 方法参数
     args?: argType[];
     // 返回类型
-    returnType?: 'void' | 'int' | classItemType
+    returnType?: 'void' | 'int' | classItemType;
 }
 
 class FunctionItem
@@ -42,13 +40,12 @@ class FunctionItem
     // 函数名称
     name?: string;
     // 功能说明
-    remark?: string;
+    remark?: string = '';
     // 是否是抽象方法
-    isAbstract: boolean;
+    isAbstract: boolean = false;
     // 是否是静态方法
-    isStatic: boolean;                                  // 默认 false
-    // 是否是接口方法
-    isInterface: boolean;
+    isStatic: boolean = false;                                  // 默认 false
+    isInterface?: boolean = false;
     // 访问控制
     visibility?: visibilityType | null;   // 默认 public
     // 是否为最终方法（不可被继承重写）
@@ -58,15 +55,13 @@ class FunctionItem
     // 返回类型
     returnType?: 'void' | 'int' | classItemType
 
-    // 当前方法所属类
-    public classItem?: classItem = null;
+    private belongsTo = null;
 
     constructor (props: functionType) {
-        let { name, args, isAbstract, isInterface, isStatic, isFinal, returnType, remark, visibility } = props;
+        let { name, args, isAbstract, isStatic, isFinal, returnType, remark, visibility } = props;
         this.name = name;
         this.args = args;
         this.isAbstract = isAbstract;
-        this.isInterface = isInterface;
         this.isStatic = isStatic;
         this.isFinal = isFinal;
         this.remark = remark;
@@ -75,7 +70,13 @@ class FunctionItem
     }
 
     setClass (class_: classItem) {
-        this.classItem = class_;
+        this.isInterface = class_.type === classType.interface;
+        this.belongsTo = {
+            hash: class_.hash,
+            namespace: class_.namespace,
+            name: class_.name,
+            class_type: class_.type
+        }
     }
 }
 

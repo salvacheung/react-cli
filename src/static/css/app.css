@@ -1,0 +1,32 @@
+.functions{
+  margin-bottom: 4px;
+}
+.function-item{
+  position: relative;
+  padding: 4px 10px;
+}
+.function-item .extend-function{
+  position: absolute;
+  left: 1px;
+  width: 3px;
+  top: 0px;
+  bottom: 0;
+}
+.interface-functions .function-item {
+  background-color:rgba(250,92,124, .1);
+}
+.interface-functions .function-item .extend-function{
+  background-color: rgb(250,92,124);
+}
+.extend-functions .function-item {
+  background-color:rgba(19, 206, 102, .1);
+}
+.extend-functions .function-item .extend-function{
+  background-color: rgb(19, 206, 102);
+}
+.card .card-header {
+  padding: 12px 8px 4px;
+}
+.card .card-body{
+  padding: 4px 8px 8px;
+}

@@ -1,6 +1,6 @@
 import { argType } from "./elements/argument";
 import classItem, { classItemType, classType } from "./elements/class-item";
-import { functionType, visibilityType } from "./elements/function";
+import FunctionItem, { functionType, visibilityType } from "./elements/function";
 
 function UML () {
     let interface_arg: classItemType = {
@@ -24,7 +24,7 @@ function UML () {
     }
     let addArgb: argType = {
         name: 'b',
-        valueType: 'number'
+        valueType: 'int'
     }
 
     let add: functionType= {
@@ -32,7 +32,6 @@ function UML () {
         remark: '实现两个变量之间的加法',
         isAbstract: false,
         isStatic: false,
-        isInterface: false,
         visibility: visibilityType.public,
         isFinal: false,
         args: [
@@ -42,27 +41,61 @@ function UML () {
         returnType: 'int'
     }
 
-    let homeInterface: classItemType = {
+    let addFunction = new FunctionItem(add);
+
+    let homeClass: classItemType = {
         name: 'home',
         type: classType._class,
         namespace: 'App\\Home',
-        functions: [
-            add
-        ]
     }
-    
-    let class_ = new classItem(homeInterface);
-    let some1Interface: classItemType = {
+    let some1Abstract: classItemType = {
         name: 'some1',
-        type: classType.trait,
+        type: classType.abstract,
         namespace: 'App\\Home',
-        functions: [
-            add
-        ]
     }
-    let some1 = new classItem(some1Interface);
+    let some1Interface: classItemType = {
+        name: 'some1Interface',
+        type: classType.interface,
+        namespace: 'App\\Home'
+    }
+    let some1InterfaceFunction1: functionType = {
+        name: 'some1interfunc',
+        isAbstract: false,
+        isStatic: false,
+        returnType: 'int',
+        remark: '测试方法'
+    }
+    let some2Interface: classItemType = {
+        name: 'some2Interface',
+        type: classType.interface,
+        namespace: 'App\\Home'
+    }
+    let some2InterfaceFunction1: functionType = {
+        name: 'some2interfunc',
+        isAbstract: false,
+        isStatic: false,
+        returnType: 'int'
+    }
+    let some1InterfaceFunction1Item = new FunctionItem(some1InterfaceFunction1)
+    let some2InterfaceFunction1Item = new FunctionItem(some2InterfaceFunction1)
+    
+    let class_ = new classItem(homeClass);
+    let some1 = new classItem(some1Abstract);
+    let some1InterfaceClass = new classItem(some1Interface);
+    let some2InterfaceClass = new classItem(some2Interface);
+    
+    some2InterfaceClass.addFunction(some2InterfaceFunction1Item);
+    some1InterfaceClass.addExtends(some2InterfaceClass)
+    some1.addInterface(some1InterfaceClass)
+
+    class_.addFunction(some1InterfaceFunction1Item);
+    class_.addFunction(addFunction);
+    
+    console.log(some1)
     class_.addExtends(some1)
     console.log(class_)
+
+    return class_;
 }
 
 export default UML;

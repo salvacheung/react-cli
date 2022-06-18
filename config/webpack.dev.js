@@ -10,7 +10,9 @@ const getStyleLoader = (pre) => {
       loader: "postcss-loader",
       options: {
         postcssOptions: {
-          plugins: ["postcss-preset-env"],
+          plugins: [
+            require("autoprefixer")
+          ],
         },
       },
     },

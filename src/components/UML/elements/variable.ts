@@ -1,1 +1,2 @@
-export type variableType = 'string' | string[] | 'number' | boolean | null;
+// 数据类型
+export type variableType = 'string' | 'array' | 'int' | 'boolean' | 'float' | 'object' | 'enum' | 'resource' | 'void' | 'callback' | null;

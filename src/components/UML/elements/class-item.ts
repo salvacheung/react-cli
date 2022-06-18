@@ -1,19 +1,19 @@
 import { propertieType } from "./propertie";
-import { functionType, extendsFunctionsType } from "./function";
+import FunctionItem, { extendsFunctionsType } from "./function";
 import { hex_md5 } from 'react-native-md5';
 
 export enum classType {'interface', '_class', 'trait', 'final','abstract'}
 
 export type classItemType = {
     name?: string;
-    hash?: string,
+    hash?: string;
     // 命名空间
     namespace?: string;                                                         
     type?: classType;              // 默认 class
     properties?: propertieType[];                                                // 对象下的属性
-    functions?: functionType[];                                                  // 对象下的方法
+    functions?: FunctionItem[];                                                  // 对象下的方法
     remark?: string;
-    extends_functions?: extendsFunctionsType[]
+    extends_functions?: extendsFunctionsType[];
 }
 
 class classItem
@@ -31,7 +31,7 @@ class classItem
     public namespace?: string = null;
 
     // 本类中的方法
-    public functions?: functionType[] = [];
+    private functions?: FunctionItem[] = [];
     
     // 继承的方法
     public extends_functions?: extendsFunctionsType[] = [];
@@ -40,10 +40,7 @@ class classItem
     public properties?: propertieType[] = [];
 
     // 继承接口
-    public interfaces?: classItemType[] = [];
-
-    // 待实现的方法(下级类需要实现的方法)
-    public unimplemented_functions?: extendsFunctionsType[] = [];
+    public interfaces?: classItem[] = [];
 
     // 接口中的方法
     public interfaces_functions?: extendsFunctionsType[] = [];
@@ -52,7 +49,7 @@ class classItem
     public extends?: classItem = null;
 
     // 扩展类
-    public traits?: classItemType[] = [];
+    public traits?: classItem[] = [];
 
     // 备注
     public remark?: string;
@@ -102,7 +99,7 @@ class classItem
     }
 
     /**
-     * 获取未实现的方法
+     * 待实现的方法(下级类需要实现的方法)
      */
     unimplementsFunctions () {
         let extends_abstract_unimplements_functions = [];
@@ -111,6 +108,7 @@ class classItem
         }
 
         // 接口
+
 
         // 抽象类
 
@@ -174,7 +172,7 @@ class classItem
      * @param trait 
      * @returns 
      */
-    addTraits (trait: classItemType) {
+    addTraits (trait: classItem) {
         if (this.hash === trait.hash) {
             return;
         }
@@ -195,33 +193,45 @@ class classItem
      * 
      * @param class_function 
      */
-    addFunction (class_function:functionType) {
+    addFunction (class_function:FunctionItem) {
         // 判断继承的方法中是否有final同名方法
-        if (this.haveExistFunction(class_function)) {
-            return;
-        }
+        // if (this.haveExistFunction(class_function)) {
+        //     return;
+        // }
+        // if (class_function.isAbstract && this.type !== classType.abstract) {
+        //     return;
+        // } 
+        class_function.setClass(this)
         this.functions.push(class_function)
     }
 
-    haveExistFunction(class_function: functionType) {
+    getFunctions () {
+        return this.functions;
+    }
+
+    haveExistFunction(class_function: FunctionItem) {
         // 判断functions中是否存在
         let functions = this.functions;
-        let exist = functions.filter((function_) => {
-            return function_.name.toLowerCase() === class_function.name.toLowerCase();
-        })
-        if (exist) {
-            return true;
+        if (functions && functions.length > 0) {
+            let exist = functions.filter((function_) => {
+                return function_.name.toLowerCase() === class_function.name.toLowerCase();
+            })
+            if (exist) {
+                return true;
+            }
         }
         // 判断继承类中是否有final同名方法
         let extends_functions = this.extends_functions;
-        let exist_final = extends_functions.filter((extend_class) => {
-            let extend_class_functions = extend_class.functions;
-            return extend_class_functions.filter((extend_function) => {
-                return extend_function.name.toLowerCase() === class_function.name.toLowerCase() && extend_function.isFinal;
+        if (extends_functions && extends_functions.length > 0) {
+            let exist_final = extends_functions.filter((extend_class) => {
+                let extend_class_functions = extend_class.functions;
+                return extend_class_functions.filter((extend_function) => {
+                    return extend_function.name.toLowerCase() === class_function.name.toLowerCase() && extend_function.isFinal;
+                })
             })
-        })
-        if (exist_final) {
-            return true;
+            if (exist_final) {
+                return true;
+            }
         }
 
         return false;
