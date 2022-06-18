@@ -32,6 +32,7 @@ function UML () {
         remark: '实现两个变量之间的加法',
         isAbstract: false,
         isStatic: false,
+        isInterface: false,
         visibility: visibilityType.public,
         isFinal: false,
         args: [
