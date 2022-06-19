@@ -107,9 +107,6 @@ class classItem
             extends_abstract_unimplements_functions = this.extends.unimplementsFunctions();
         }
 
-        // 接口
-
-
         // 抽象类
 
         return extends_abstract_unimplements_functions;
@@ -195,12 +192,30 @@ class classItem
      */
     addFunction (class_function:FunctionItem) {
         // 判断继承的方法中是否有final同名方法
-        // if (this.haveExistFunction(class_function)) {
-        //     return;
+        if (this.haveExistFunction(class_function)) {
+            return;
+        }
+        if (class_function.isAbstract && this.type !== classType.abstract) {
+            return;
+        }
+
+        // 检查是否是继承的接口类要求实现的函数
+        // let interfaces = this.interfaces;
+        // if (interfaces.length > 0) {
+        //     interfaces.forEach((_interface) => {
+        //         let interface_functions = _interface.getFunctions();
+        //         if (interface_functions.length > 0) {
+        //             interface_functions.forEach((_interface_function) => {
+        //                 if (_interface_function.name === class_function.name) {
+
+        //                 }
+        //             })
+        //         }
+        //     })
         // }
-        // if (class_function.isAbstract && this.type !== classType.abstract) {
-        //     return;
-        // } 
+
+        // 检查是否是继承的抽象类要求实现的函数
+        
         class_function.setClass(this)
         this.functions.push(class_function)
     }
@@ -216,7 +231,7 @@ class classItem
             let exist = functions.filter((function_) => {
                 return function_.name.toLowerCase() === class_function.name.toLowerCase();
             })
-            if (exist) {
+            if (exist.length > 0) {
                 return true;
             }
         }
@@ -229,7 +244,7 @@ class classItem
                     return extend_function.name.toLowerCase() === class_function.name.toLowerCase() && extend_function.isFinal;
                 })
             })
-            if (exist_final) {
+            if (exist_final.length > 0) {
                 return true;
             }
         }

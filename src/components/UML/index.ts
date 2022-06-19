@@ -93,7 +93,7 @@ function UML () {
     
     console.log(some1)
     class_.addExtends(some1)
-    console.log(class_)
+    console.log(JSON.stringify(class_))
 
     return class_;
 }

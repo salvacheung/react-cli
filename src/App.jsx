@@ -15,10 +15,13 @@ function App() {
                         left: '-12px',
                         top: '-12px'
                     }}>
-                        <span className="badge text-bg-red-500"><i className="bi bi-lightning-charge-fill bi-start"></i>{_uml.namespace}</span>
+                        <span className="badge text-bg-red-500"><i className="bi bi-folder-symlink-fill bi-start"></i>{_uml.namespace}</span>
                     </div>
                     <div className='d-flex flex-row justify-content-between align-items-center'>
-                        <span>{_uml.name}</span>
+                        <span>
+                            <span className=''><i className='bi bi-lightning-charge-fill bi-start text-danger'></i></span>
+                            {_uml.name}
+                        </span>
                         <div>
                             <i className='bi bi-chevron-down'></i>
                         </div>
